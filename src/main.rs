@@ -1,5 +1,8 @@
 extern crate gio ; 
 extern crate gtk ;
+extern crate gdk_pixbuf ;
+extern crate id3 ; 
+
 
 use gtk::{
     ToolButtonExt , 
