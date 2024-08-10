@@ -1,0 +1,9 @@
+[package]
+name = "KageGroove"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gio = "^0.3.0"
+gtk = "^0.3.0"
+
