@@ -6,9 +6,11 @@ use gtk::{
     WidgetExt ,
 }; 
 
-use gio::ApplicationFlags ;
 
-use KageGroove::app::app::App ;
+
+use gio::{ApplicationExt, ApplicationExtManual, ApplicationFlags} ;
+
+use KageGroove::app::app::{self, App} ;
 
 
 fn main() {
@@ -17,5 +19,11 @@ fn main() {
         ApplicationFlags::empty(),
     ).expect("Initialization failed...");
     
-    App::new(application) ;
+    application.connect_startup(|application| { 
+        App::new(application.clone()) ;
+    });
+
+    application.run(&[]) ;
+
+    
 }

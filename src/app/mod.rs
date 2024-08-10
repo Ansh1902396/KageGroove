@@ -7,6 +7,16 @@ pub mod app {
 
     use gtk::{ContainerExt, SeparatorToolItem, ToolButton, Toolbar};
 
+    use gtk::{
+        Adjustment , 
+        Image , 
+        ImageExt , 
+        Scale , 
+        ScaleExt ,
+    } ; 
+
+    use gtk::Orientation::{Horizontal, Vertical};
+
     const PLAY_STOCK: &str = "gtk-media-play";
     const PAUSE_STOCK: &str = "gtk-media-pause";
     pub struct App {
@@ -19,7 +29,20 @@ pub mod app {
             let window = ApplicationWindow::new(&application);
             let toolbar = MusicToolbar::new();
 
-            window.add(toolbar.toolbar());
+            window.set_title("Music Player");
+            let vbox = gtk::Box::new(Vertical, 0);
+            window.add(&vbox);
+            
+            vbox.add(toolbar.toolbar()); 
+
+            let cover = Image::new();
+            cover.set_from_file("cover.jpg");
+            vbox.add(&cover);
+
+            let adjustment = Adjustment::new(0.0 , 0.0 , 10.0 , 0.0, 0.0, 0.0) ;
+            let scale = Scale::new(Horizontal, &adjustment) ;
+            
+            vbox.add(&scale) ;
 
             window.show_all();
 
@@ -49,8 +72,10 @@ pub mod app {
 
         
         }
+
+        
         fn connect_events(&self) {
-            unimplemented!()
+            
         }
     }
 }
