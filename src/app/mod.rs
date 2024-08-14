@@ -1,7 +1,9 @@
 pub mod app {
+    use crate::playlist::{self,Playlist};
     use crate::toolbar::toolbar::MusicToolbar;
     use gio::{prelude::*, ApplicationFlags};
     use gtk::{prelude::*, Application, ApplicationWindow};
+    use std::rc::Rc;
 
     use std::env;
 
@@ -20,6 +22,9 @@ pub mod app {
     const PLAY_STOCK: &str = "gtk-media-play";
     const PAUSE_STOCK: &str = "gtk-media-pause";
     pub struct App {
+        adjustment: Adjustment,
+        cover : Image,
+        playlist: Rc<Playlist>,
         toolbar: MusicToolbar,
         window: ApplicationWindow,
     }
@@ -35,18 +40,22 @@ pub mod app {
             
             vbox.add(toolbar.toolbar()); 
 
+            let playlist = Rc::new(Playlist::new()) ;
+            vbox.add(playlist.view()) ;
+
             let cover = Image::new();
-            cover.set_from_file("cover.jpg");
+            cover.set_from_file("");
             vbox.add(&cover);
 
             let adjustment = Adjustment::new(0.0 , 0.0 , 10.0 , 0.0, 0.0, 0.0) ;
             let scale = Scale::new(Horizontal, &adjustment) ;
+           
             
             vbox.add(&scale) ;
 
             window.show_all();
 
-            let app = App { toolbar, window };
+            let app = App {adjustment , cover , playlist ,  toolbar, window };
 
             app.connect_events();
             app.connect_toolbar_events();
@@ -70,6 +79,15 @@ pub mod app {
                 }
             }); 
 
+            let parent = self.window.clone() ;
+            let playlist = self.playlist.clone() ;
+
+            self.toolbar.open_button.connect_clicked(move |_| {
+                let file = playlist::Playlist::show_open_dialog(&parent);
+                if let Some(file) = file  {
+                    playlist.add(&file) ;
+                }
+            });
         
         }
 
