@@ -17,6 +17,8 @@ pub mod app {
         ScaleExt ,
     } ; 
 
+    use playlist::set_cover;
+
     use gtk::Orientation::{Horizontal, Vertical};
 
     const PLAY_STOCK: &str = "gtk-media-play";
@@ -69,11 +71,14 @@ pub mod app {
                 window.destroy();
             });
 
+            let playlist = self.playlist.clone() ;
+            let cover = self.cover.clone() ;
             let play_button = self.toolbar.play_button.clone() ;
 
             self.toolbar.play_button.connect_clicked(move |_|  {
                 if play_button.get_stock_id() == Some(PLAY_STOCK.to_string()) { 
                     play_button.set_stock_id(PAUSE_STOCK) ;
+                    set_cover(&cover, &playlist)
                 }else  {
                     play_button.set_stock_id(PLAY_STOCK) ;
                 }
@@ -88,6 +93,15 @@ pub mod app {
                     playlist.add(&file) ;
                 }
             });
+
+            let playlist = self.playlist.clone() ;
+            self.toolbar.remove_button.connect_clicked(move |_| {
+                playlist.remove_selected() ;
+            });
+
+
+
+           
         
         }
 
