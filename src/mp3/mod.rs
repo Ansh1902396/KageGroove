@@ -119,4 +119,16 @@ pub mod mp3 {
         }
 
     }
+
+    impl<R> Iterator for Mp3Decoder<R> where R:Read { 
+        type Item = i16 ; 
+
+        fn next(&mut self) -> Option<i16> { 
+            next_sample(self)
+        }
+
+        fn size_hint(&self) -> (usize , Option<usize>) { 
+            (self.current_frame.samples[0].len() - self.curren_frame_sample_pos , None)
+        }
+    }
 }
