@@ -1,7 +1,12 @@
 extern crate gio ; 
 extern crate gtk ;
+
 extern crate gdk_pixbuf ;
 extern crate id3 ; 
+extern crate crossbeam; 
+extern crate pulse_simple ; 
+extern crate simplemad ; 
+use std::{env, time::Duration};
 
 
 use gtk::{
@@ -16,6 +21,9 @@ use gio::{ApplicationExt, ApplicationExtManual, ApplicationFlags} ;
 use KageGroove::app::app::{self, App} ;
 
 
+
+
+
 fn main() {
     let application = gtk::Application::new(
         "com.github.gtk-rs.examples.toolbar",
@@ -26,7 +34,9 @@ fn main() {
         App::new(application.clone()) ;
     });
 
-    application.run(&[]) ;
+    application.connect_activate(|_| {});
+
+    application.run(&env::args().collect::<Vec<_>>());
 
     
 }
